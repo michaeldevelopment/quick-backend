@@ -33,10 +33,12 @@ const config = {
     apiKey: process.env.CLOUDINARY_API_KEY,
     apiSecret: process.env.CLOUDINARY_API_SECRET,
   },
+  sendgrid: {
+    apiKey: process.env.SENGRID_API_KEY,
+    senderEmail: process.env.SENDER_EMAIL,
+    resetUrl: process.envPASSWORD_RESET_URL,
+  },
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
-  sendgridApiKey: process.env.SENGRID_API_KEY,
-  senderEmail: process.env.SENDER_EMAIL,
-  resetUrl: process.envPASSWORD_RESET_URL,
 };
 
 module.exports = config;
