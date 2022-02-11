@@ -1,16 +1,16 @@
 const nodemailer = require("nodemailer");
 const sgTransport = require("nodemailer-sendgrid");
-const config = require("../config");
+const config = require("../../config");
 
 exports.welcomeEmail = async (username, email) => {
   const options = {
-    apiKey: config.sendgridApiKey,
+    apiKey: config.sendgrid.apiKey,
   };
 
   let transporter = nodemailer.createTransport(sgTransport(options));
 
   let info = await transporter.sendMail({
-    from: `${config.senderEmail}`, // sender address
+    from: `${config.sendgrid.senderEmail}`, // sender address
     to: `${email}`, // list of receivers
     subject: "Bienvenido a Wayki!", // Subject line
     text: `Hola, ${username} bienvenido a nuestra aplicacion Wayki!`, // plain text body
@@ -20,16 +20,16 @@ exports.welcomeEmail = async (username, email) => {
 
 exports.changePassword = async (username, email, id) => {
   const options = {
-    apiKey: config.SENGRID_API_KEY,
+    apiKey: config.sendgrid.SENGRID_API_KEY,
   };
 
   let transporter = nodemailer.createTransport(sgTransport(options));
 
   let info = await transporter.sendMail({
-    from: `${config.senderEmail}`, // sender address
+    from: `${config.sendgrid.senderEmail}`, // sender address
     to: `${email}`, // list of receivers
     subject: "Recupera tu contraseña", // Subject line
-    text: `Hola, ${username}. Has clic en el siguiente link para poder recuperar tu contraseña: ${config.resetUrl}/${id}`, // plain text body
-    html: `<b>Hola, ${username} Has clic en el siguiente link para poder recuperar tu contraseña: ${config.resetUrl}/${id}</b>`, // html body
+    text: `Hola, ${username}. Has clic en el siguiente link para poder recuperar tu contraseña: ${config.sendgrid.resetUrl}/${id}`, // plain text body
+    html: `<b>Hola, ${username} Has clic en el siguiente link para poder recuperar tu contraseña: ${config.sendgrid.resetUrl}/${id}</b>`, // html body
   });
 };
