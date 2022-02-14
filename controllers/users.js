@@ -7,14 +7,16 @@ const config = require("../config");
 const { welcomeEmail, changePassword } = require("../utils/mail");
 
 const schemaRegister = Joi.object({
+  firstName: Joi.string().min(6).max(30),
+  lastName: Joi.string().min(6).max(30),
   username: Joi.string().min(6).max(30).required(),
-  pwd: Joi.string().min(6).max(30).required(),
+  password: Joi.string().min(6).max(30).required(),
   email: Joi.string().required().email(),
 });
 
 const schemaLogin = Joi.object({
   username: Joi.string().min(6).max(30).required(),
-  pwd: Joi.string().min(6).max(30).required(),
+  password: Joi.string().min(6).max(30).required(),
 });
 
 const schemaEmailRecovery = Joi.object({
@@ -22,12 +24,13 @@ const schemaEmailRecovery = Joi.object({
 });
 
 const schemaResetPassword = Joi.object({
-  newPwd: Joi.string().min(6).max(30).required(),
+  newPassword: Joi.string().min(6).max(30).required(),
   id: Joi.string(),
 });
 
 exports.all = async (req, res, next) => {
-  const data = await User.find({}).populate("posts");
+  // const data = await User.find({}).populate("posts");
+  const data = await User.find({});
   res.json({ data });
 };
 
@@ -43,24 +46,22 @@ exports.createUser = async (req, res, next) => {
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
   }
-
   const emailNotUnique = await User.findOne({ email: body.email });
   const usernameNotUnique = await User.findOne({ username: body.username });
 
   if (emailNotUnique)
     return res.json({ error: true, message: "Ya existe éste email" });
-
   if (usernameNotUnique)
     return res.json({
       error: true,
       message: "Ya existe éste nombre de usuario",
     });
-
-  const hashedPassword = await bcrypt.hash(body.pwd, 10);
-
+  const hashedPassword = await bcrypt.hash(body.password, 10);
   const user = new User({
     username: body.username,
-    pwd: hashedPassword,
+    firstName: body.firstName,
+    lastName: body.lastName,
+    password: hashedPassword,
     email: body.email,
   });
   const savedUser = await user.save();
@@ -73,7 +74,6 @@ exports.createUser = async (req, res, next) => {
     },
     config.ACCESS_TOKEN_SECRET
   );
-
   return res.json({
     token: accessToken,
     username: savedUser.username,
@@ -87,17 +87,13 @@ exports.loginUser = async (req, res, next) => {
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
   }
+  const validUser = await User.findOne({ username: body.username });
 
-  const validUser = await User.findOne({ username: body.username }).populate(
-    "posts"
-  );
   if (!validUser)
     return res.json({ error: true, message: "Nombre de usuario incorrecto" });
-
-  const validPwd = await bcrypt.compare(body.pwd, validUser.pwd);
-  if (!validPwd)
+  const validpassword = await bcrypt.compare(body.password, validUser.password);
+  if (!validpassword)
     return res.json({ error: true, message: "Contraseña incorrecta" });
-
   // PayLoad JWT
   const accessToken = jwt.sign(
     {
@@ -107,13 +103,11 @@ exports.loginUser = async (req, res, next) => {
     },
     config.ACCESS_TOKEN_SECRET
   );
-
   res.json({
     token: accessToken,
     email: validUser.email,
     username: validUser.username,
     id: validUser._id,
-    posts: validUser.posts,
   });
 };
 
@@ -142,11 +136,11 @@ exports.resetPassword = async (req, res, next) => {
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
   }
-  const hashedPassword = await bcrypt.hash(body.newPwd, 10);
+  const hashedPassword = await bcrypt.hash(body.newpassword, 10);
 
   const updatedUser = await User.findByIdAndUpdate(
     body.id,
-    { pwd: hashedPassword },
+    { password: hashedPassword },
     { runValidators: true, new: true }
   );
   res.json(updatedUser);

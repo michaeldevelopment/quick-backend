@@ -24,11 +24,11 @@ const recipeFields = {
     },
   ],
   favorites: [String],
-  user: {
-    type: mongoose.Types.ObjectId,
-    ref: "User",
-    required: [true, "Por favor indica el usuario"],
-  },
+  // user: {
+  //   type: mongoose.Types.ObjectId,
+  //   ref: "User",
+  //   required: [true, "Por favor indica el usuario"],
+  // },
 };
 
 const recipeSchema = new mongoose.Schema(recipeFields, { timestamps: true });

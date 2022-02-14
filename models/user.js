@@ -17,19 +17,22 @@ const userFields = {
     type: String,
     required: true,
   },
-  name: {
+  firstName: {
+    type: String,
+  },
+  lastName: {
     type: String,
   },
   bio: {
     type: String,
   },
   photo: String,
-  recipes: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: "Post",
-    },
-  ],
+  // recipes: [
+  //   {
+  //     type: mongoose.Types.ObjectId,
+  //     ref: "Recipe",
+  //   },
+  // ],
 };
 
 const userSchema = new mongoose.Schema(userFields, { timestamps: true });
