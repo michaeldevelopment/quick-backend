@@ -2,7 +2,7 @@ const router = require("express").Router();
 const controller = require("../controllers/users");
 const { authToken } = require("../middleware");
 
-router.route("/").get(authToken, controller.all);
+router.route("/").get(controller.all);
 
 router.route("/emailrecovery").post(controller.emailRecovery);
 router.route("/passwordreset").post(controller.resetPassword);
