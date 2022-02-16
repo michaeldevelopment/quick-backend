@@ -27,12 +27,18 @@ const userFields = {
     type: String,
   },
   photo: String,
-  // recipes: [
-  //   {
-  //     type: mongoose.Types.ObjectId,
-  //     ref: "Recipe",
-  //   },
-  // ],
+  recipes: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Recipe",
+    },
+  ],
+  favoriteRecipes: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Recipe",
+    },
+  ],
 };
 
 const userSchema = new mongoose.Schema(userFields, { timestamps: true });

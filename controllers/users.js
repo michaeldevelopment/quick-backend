@@ -29,8 +29,10 @@ const schemaResetPassword = Joi.object({
 });
 
 exports.all = async (req, res, next) => {
-  // const data = await User.find({}).populate("posts");
-  const data = await User.find({});
+  const data = await User.find({})
+    .populate("recipes")
+    .populate("favoriteRecipes");
+
   res.json({ data });
 };
 
@@ -87,7 +89,9 @@ exports.loginUser = async (req, res, next) => {
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
   }
-  const validUser = await User.findOne({ username: body.username });
+  const validUser = await User.findOne({ username: body.username })
+    .populate("recipes")
+    .populate("favoriteRecipes");
 
   if (!validUser)
     return res.json({ error: true, message: "Nombre de usuario incorrecto" });

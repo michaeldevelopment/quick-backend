@@ -5,10 +5,7 @@ const { DATABASE, PORT } = config;
 const { connect } = require("./database");
 
 connect({
-  protocol: DATABASE.protocol,
   url: DATABASE.url,
-  username: DATABASE.username,
-  password: DATABASE.password,
 });
 
 const server = http.createServer(app);

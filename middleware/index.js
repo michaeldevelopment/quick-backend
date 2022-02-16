@@ -42,7 +42,7 @@ const authToken = (req, res, next) => {
     token = authorization.substring(7);
   }
   const decodedToken = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
-  req.decodedUser = decodedToken;
+  req.decoded = decodedToken;
   if (!decodedToken.id) {
     return res.status(401).json({ error: "token missing or invalid" });
   }
