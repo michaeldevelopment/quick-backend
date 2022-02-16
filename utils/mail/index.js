@@ -12,8 +12,8 @@ exports.welcomeEmail = async (username, email) => {
   let info = await transporter.sendMail({
     from: `${config.sendgrid.senderEmail}`, // sender address
     to: `${email}`, // list of receivers
-    subject: "Bienvenido a Wayki!", // Subject line
-    text: `Hola, ${username} bienvenido a nuestra aplicacion Wayki!`, // plain text body
+    subject: "Bienvenido a Quick App!", // Subject line
+    text: `Hola, ${username} bienvenido a nuestra aplicacion Quick!`, // plain text body
     html: `<b>Hola, ${username} bienvenido</b>`, // html body
   });
 };

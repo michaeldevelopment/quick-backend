@@ -5,7 +5,23 @@ const recipeFields = {
     type: String,
     required: [true, "Por favor indica el titulo"],
     trim: true,
-    maxLength: 100,
+    minLength: 10,
+    maxLength: 50,
+  },
+  ingredients: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  category: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  food_hour: {
+    type: String,
+    trim: true,
+    required: true,
   },
   description: {
     type: String,
@@ -16,19 +32,11 @@ const recipeFields = {
     type: Number,
     default: 0,
   },
-  ingredients: [
-    {
-      type: String,
-      trim: true,
-      maxLength: 50,
-    },
-  ],
-  favorites: [String],
-  // user: {
-  //   type: mongoose.Types.ObjectId,
-  //   ref: "User",
-  //   required: [true, "Por favor indica el usuario"],
-  // },
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 };
 
 const recipeSchema = new mongoose.Schema(recipeFields, { timestamps: true });
@@ -47,6 +55,6 @@ recipeSchema.set("toJSON", {
   },
 });
 
-const Recipe = mongoose.model("Recipes", recipeSchema);
+const Recipe = mongoose.model("Recipe", recipeSchema);
 
 module.exports = { Recipe, recipeFields };
