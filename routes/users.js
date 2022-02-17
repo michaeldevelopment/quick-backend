@@ -4,6 +4,11 @@ const { authToken } = require("../middleware");
 
 router.route("/").get(controller.all);
 
+router
+  .route("/:id")
+  .get(authToken, controller.me)
+  .put(authToken, controller.deleteFavRecipe);
+
 router.route("/emailrecovery").post(controller.emailRecovery);
 router.route("/passwordreset").post(controller.resetPassword);
 

@@ -46,25 +46,46 @@ exports.createRecipe = async (req, res, next) => {
 exports.addToFav = async (req, res, next) => {
   const { decoded = {}, body = {} } = req;
 
-  const findUser = await User.findById(decoded.id);
-  const notFavRecipeTwice = await User.find({
-    firstName: "Jose",
+  const findUser = await User.findById(decoded.id).populate("favoriteRecipes");
+
+  const userWithFav = await User.findById(decoded.id)
+    .populate("favoriteRecipes")
+    .find({
+      favoriteRecipes: {
+        $all: [body.recipeId],
+      },
+    });
+
+  if (userWithFav.length) {
+    return res.json({
+      error: true,
+      message: "Ésta receta ya está agregada a mis favoritos",
+    });
+  } else {
+    findUser.favoriteRecipes = findUser.favoriteRecipes.concat(body.recipeId);
+    const userWithFavRecipe = await findUser.save();
+
+    return res.json({
+      error: false,
+      message: "La receta se ha guardado a mis favoritos",
+      userWithFavRecipe,
+    });
+  }
+};
+
+exports.deleteRecipe = async (req, res, next) => {
+  const { params = {} } = req;
+  console.log(params.id);
+  const data = await Recipe.findByIdAndDelete(params.id, {
+    new: true,
   });
-
-  // findUser.favoriteRecipes = findUser.favoriteRecipes.concat(body.recipeId);
-  // const userWithFavRecipe = await findUser.save();
-
-  console.log(body.recipeId);
-  console.log(notFavRecipeTwice);
-
-  // return res.json({
-  //   error: false,
-  //   message: "La receta se ha guardado a Favoritos",
-  // });
+  res.json({
+    error: false,
+    message: "La receta se ha eliminado satisfactoriamente",
+  });
 };
 
 exports.cleanDb = async (req, res, next) => {
-  await User.deleteMany({});
   await Recipe.deleteMany({});
   res.status(204).end();
 };

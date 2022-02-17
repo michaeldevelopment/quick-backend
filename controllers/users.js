@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const Joi = require("@hapi/joi");
 const config = require("../config");
 const { welcomeEmail, changePassword } = require("../utils/mail");
+const { Recipe, recipeFields } = require("../models/recipe");
 
 const schemaRegister = Joi.object({
   firstName: Joi.string().min(6).max(30),
@@ -30,7 +31,7 @@ const schemaResetPassword = Joi.object({
 
 exports.all = async (req, res, next) => {
   const data = await User.find({})
-    .populate("recipes")
+    .populate("recipes", { user: 0 })
     .populate("favoriteRecipes");
 
   res.json({ data });
@@ -38,9 +39,16 @@ exports.all = async (req, res, next) => {
 
 // Get user for profile
 exports.me = async (req, res, next) => {
-  const { decodedUser = {} } = req;
-  const user = await User.findById(decodedUser.id);
-  res.json(user);
+  const { decoded = {} } = req;
+  const user = await User.findById(decoded.id)
+    .populate("recipes", { user: 0 })
+    .populate("favoriteRecipes");
+
+  res.json({
+    error: false,
+    recipes: user.recipes,
+    favoriteRecipes: user.favoriteRecipes,
+  });
 };
 
 exports.createUser = async (req, res, next) => {
@@ -157,4 +165,21 @@ exports.updateUser = async (req, res, next) => {
     new: true,
   });
   res.json(updatedUser);
+};
+
+exports.deleteFavRecipe = async (req, res, next) => {
+  const { params = {}, decoded = {} } = req;
+
+  const findUser = await User.findByIdAndUpdate(
+    decoded.id,
+    {
+      $pull: { favoriteRecipes: params.id },
+    },
+    { new: true }
+  );
+
+  res.json({
+    error: false,
+    message: "La receta se ha eliminado de tus favoritos",
+  });
 };
