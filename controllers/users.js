@@ -5,11 +5,11 @@ const jwt = require("jsonwebtoken");
 const Joi = require("@hapi/joi");
 const config = require("../config");
 const { welcomeEmail, changePassword } = require("../utils/mail");
-const { Recipe, recipeFields } = require("../models/recipe");
+// const { Recipe, recipeFields } = require("../models/recipe");
 
 const schemaRegister = Joi.object({
-  firstName: Joi.string().min(6).max(30),
-  lastName: Joi.string().min(6).max(30),
+  firstName: Joi.string().min(3).max(30),
+  lastName: Joi.string().min(3).max(30),
   username: Joi.string().min(6).max(30).required(),
   password: Joi.string().min(6).max(30).required(),
   email: Joi.string().required().email(),
@@ -159,8 +159,8 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  const { decodedUser = {} } = req;
-  const updatedUser = await User.findByIdAndUpdate(decodedUser.id, req.body, {
+  const { decoded = {} } = req;
+  const updatedUser = await User.findByIdAndUpdate(decoded.id, req.body, {
     runValidators: true,
     new: true,
   });
