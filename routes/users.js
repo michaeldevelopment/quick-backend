@@ -7,7 +7,8 @@ router.route("/").get(controller.all);
 router
   .route("/:id")
   .get(authToken, controller.me)
-  .put(authToken, controller.deleteFavRecipe);
+  .put(authToken, controller.deleteFavRecipe)
+  .put(authToken, controller.updateUser);
 
 router.route("/emailrecovery").post(controller.emailRecovery);
 router.route("/passwordreset").post(controller.resetPassword);
