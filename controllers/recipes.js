@@ -86,6 +86,7 @@ exports.deleteRecipe = async (req, res, next) => {
 };
 
 exports.cleanDb = async (req, res, next) => {
+  await User.deleteMany({});
   await Recipe.deleteMany({});
   res.status(204).end();
 };

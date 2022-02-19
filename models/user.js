@@ -1,6 +1,37 @@
 const mongoose = require("mongoose");
 
-const creditCardFields = {
+const paymentSchema = new mongoose.Schema(
+  {
+    refId: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    bill: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    value: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    state: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+const creditCards = new mongoose.Schema({
   expMonth: {
     type: String,
     trim: true,
@@ -26,14 +57,7 @@ const creditCardFields = {
     trim: true,
     required: true,
   },
-};
-
-const billingFields = {
-  creditCards: [creditCardFields],
-  customerId: {
-    type: String,
-  },
-};
+});
 
 const userFields = {
   username: {
@@ -68,25 +92,21 @@ const userFields = {
       ref: "Recipe",
     },
   ],
-  premium: {
-    type: Boolean,
-  },
-  billing: billingFields,
   favoriteRecipes: [
     {
       type: mongoose.Types.ObjectId,
       ref: "Recipe",
     },
   ],
+  premium: {
+    creditCards: [creditCards],
+    customerId: String,
+    premiumStatus: { type: Boolean, default: false },
+    payments: [paymentSchema],
+  },
 };
 
 const userSchema = new mongoose.Schema(userFields, { timestamps: true });
-
-const billingSchema = new mongoose.Schema(billingFields, { timestamps: true });
-
-const creditCardSchema = new mongoose.Schema(creditCardFields, {
-  timestamps: true,
-});
 
 userSchema.set("toJSON", {
   transform: (document, returnedObject) => {
