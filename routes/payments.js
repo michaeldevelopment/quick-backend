@@ -2,10 +2,12 @@ const router = require("express").Router();
 const controller = require("../controllers/payment-controller");
 const { authToken } = require("../middleware");
 
-router.route("/cardtoken").post(controller.createCardToken);
+router.route("/cardtoken").post(authToken, controller.createCardToken);
 
-router.route("/createcustom").post(authToken, controller.createUser);
+router.route("/createcustomer").post(authToken, controller.createCustomer);
 
 router.route("/makepayment").post(authToken, controller.makePayment);
+
+router.route("/cleancredit").post(authToken, controller.cleanCredit);
 
 module.exports = router;
