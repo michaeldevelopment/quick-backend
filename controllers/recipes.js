@@ -2,7 +2,6 @@ require("express-async-errors");
 const { Recipe, recipeFields } = require("../models/recipe");
 const User = require("../models/user");
 const Joi = require("@hapi/joi");
-const config = require("../config");
 
 const schemaRecipe = Joi.object({
   title: Joi.string().required().min(10).max(50),
@@ -11,6 +10,7 @@ const schemaRecipe = Joi.object({
   food_hour: Joi.string().required(),
   description: Joi.string().required(),
   premium: Joi.boolean().required(),
+  photos: Joi.string().required(),
 });
 
 exports.all = async (req, res, next) => {
@@ -76,13 +76,13 @@ exports.addToFav = async (req, res, next) => {
 
 exports.deleteRecipe = async (req, res, next) => {
   const { params = {} } = req;
-  console.log(params.id);
   const data = await Recipe.findByIdAndDelete(params.id, {
     new: true,
   });
   res.json({
     error: false,
     message: "La receta se ha eliminado satisfactoriamente",
+    data,
   });
 };
 

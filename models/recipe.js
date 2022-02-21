@@ -28,10 +28,7 @@ const recipeFields = {
     required: [true, "Por favor indica la descripción"],
     trim: true,
   },
-  mainPhoto: {
-    type: Number,
-    default: 0,
-  },
+  photos: { type: String },
   premium: { type: Boolean, default: false },
   user: {
     type: mongoose.Types.ObjectId,

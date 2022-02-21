@@ -183,5 +183,6 @@ exports.deleteFavRecipe = async (req, res, next) => {
   res.json({
     error: false,
     message: "La receta se ha eliminado de tus favoritos",
+    findUser,
   });
 };
