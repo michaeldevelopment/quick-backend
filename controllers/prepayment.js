@@ -19,7 +19,7 @@ exports.createCardTokenAndCustomer = async (req, res) => {
     "card[cvc]": payment.CVC,
   };
 
-  const { card, id, status } = await epayco.token.create(creditCardInfo);
+  const { card, id } = await epayco.token.create(creditCardInfo);
 
   const creditCard = {
     expMonth: card.exp_month,

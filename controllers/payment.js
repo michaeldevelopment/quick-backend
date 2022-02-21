@@ -9,85 +9,6 @@ const epayco = require("epayco-sdk-node")({
   test: true,
 });
 
-// exports.createCardToken = async (req, res) => {
-//   const { decoded = {}, body: payment } = req;
-//   //El objeto creditCardInfo lo recibe el body. A partir del req.body se construye el objeto creditCard
-//   const creditCardInfo = {
-//     "card[number]": payment.cardNumber,
-//     "card[exp_year]": payment.expYear,
-//     "card[exp_month]": payment.expMonth,
-//     "card[cvc]": payment.CVC,
-//   };
-
-//   try {
-//     const { card, id, status } = await epayco.token.create(creditCardInfo);
-
-//     const creditCard = {
-//       expMonth: card.exp_month,
-//       expYear: card.exp_year,
-//       name: card.name,
-//       mask: card.mask,
-//       tokenId: id,
-//     };
-
-//     const findUser = await User.findById(decoded.id);
-
-//     findUser.premium.creditCards =
-//       findUser.premium.creditCards.concat(creditCard);
-
-//     const updatedUser = await findUser.save();
-//     return res.status(200).json(updatedUser);
-//   } catch (error) {
-//     console.log(
-//       "🚀 ~ file: payment.service.js ~ line 14 ~ createCardToken ~ e",
-//       error
-//     );
-//     res.status(500).end({
-//       message: "Error al crear el token",
-//       error,
-//     });
-//   }
-// };
-
-// exports.createCustomer = async (req, res) => {
-//   try {
-//     const { decoded = {} } = req;
-
-//     const findUser = await User.findById(decoded.id);
-//     const creditCards = findUser.premium.creditCards;
-
-//     const userInfo = {
-//       token_card: findUser?.premium?.creditCards?.[0]?.tokenId,
-//       name: findUser.firstName,
-//       last_name: findUser.lastName,
-//       email: findUser.email,
-//       default: true,
-//     };
-
-//     const { data } = await epayco.customers.create(userInfo);
-
-//     console.log(data);
-
-//     const addCustomerId = await User.findByIdAndUpdate(
-//       decoded.id,
-//       {
-//         premium: {
-//           creditCards,
-//           customerId: data.customerId,
-//         },
-//       },
-//       { new: true }
-//     );
-
-//     return res.json(addCustomerId);
-//   } catch (error) {
-//     console.log(
-//       "🚀 ~ file: payment.service.js ~ line 25 ~ createUser ~ e",
-//       error
-//     );
-//   }
-// };
-
 exports.makePayment = async (req, res) => {
   try {
     const { decoded, body: payment } = req;
@@ -154,7 +75,7 @@ exports.makePayment = async (req, res) => {
       );
 
       const updatedUser = await userSuccess.save();
-      console.log(updatedUser);
+
       return res.json({
         error: false,
         message: "Compra exitosa",
@@ -167,10 +88,7 @@ exports.makePayment = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(
-      "🚀 ~ file: payment.service.js ~ line 36 ~ makePayment ~ error",
-      error
-    );
+    return res.json({ message: error, error: true });
   }
 };
 
