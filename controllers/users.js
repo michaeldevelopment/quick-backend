@@ -89,6 +89,7 @@ exports.createUser = async (req, res, next) => {
     username: savedUser.username,
     email: savedUser.email,
     id: savedUser._id,
+    premium: savedUser.premium.premiumStatus,
   });
 };
 
@@ -120,6 +121,7 @@ exports.loginUser = async (req, res, next) => {
     email: validUser.email,
     username: validUser.username,
     id: validUser._id,
+    premium: validUser.premium.premiumStatus,
   });
 };
 

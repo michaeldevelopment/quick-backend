@@ -10,6 +10,7 @@ const schemaRecipe = Joi.object({
   category: Joi.string().required(),
   food_hour: Joi.string().required(),
   description: Joi.string().required(),
+  premium: Joi.boolean().required(),
 });
 
 exports.all = async (req, res, next) => {
