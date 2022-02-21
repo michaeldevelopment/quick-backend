@@ -154,6 +154,7 @@ exports.makePayment = async (req, res) => {
       );
 
       const updatedUser = await userSuccess.save();
+      console.log(updatedUser);
       return res.json({
         error: false,
         message: "Compra exitosa",

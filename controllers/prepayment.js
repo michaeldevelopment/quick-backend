@@ -10,7 +10,8 @@ const epayco = require("epayco-sdk-node")({
 
 exports.createCardTokenAndCustomer = async (req, res) => {
   const { decoded = {}, body: payment } = req;
-  //El objeto creditCardInfo lo recibe el body. A partir del req.body se construye el objeto creditCard
+  // El objeto creditCardInfo lo recibe el body. A partir del req.body se construye el objeto creditCard
+
   const creditCardInfo = {
     "card[number]": payment.cardNumber,
     "card[exp_year]": payment.expYear,

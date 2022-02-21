@@ -32,6 +32,7 @@ const recipeFields = {
     type: Number,
     default: 0,
   },
+  premium: { type: Boolean, default: false },
   user: {
     type: mongoose.Types.ObjectId,
     ref: "User",
