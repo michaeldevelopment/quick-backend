@@ -27,13 +27,11 @@ exports.createRecipe = async (req, res, next) => {
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
   }
-
   const findUser = await User.findById(decoded.id);
   const recipe = new Recipe({
     ...body,
     user: decoded.id,
   });
-
   const savedRecipe = await recipe.save();
   findUser.recipes = findUser.recipes.concat(savedRecipe.id);
   await findUser.save();
