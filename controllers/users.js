@@ -125,7 +125,7 @@ exports.loginUser = async (req, res, next) => {
   });
 };
 
-exports.emailRecovery = async (req, res, next) => {
+exports.recoveryPassword = async (req, res, next) => {
   const { error, value: body } = schemaEmailRecovery.validate(req.body);
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
@@ -139,7 +139,7 @@ exports.emailRecovery = async (req, res, next) => {
     });
 
   changePassword(validUser.username, validUser.email, validUser._id);
-  res.json({
+  return res.json({
     error: false,
     id: validUser._id,
   });
@@ -150,14 +150,14 @@ exports.resetPassword = async (req, res, next) => {
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
   }
-  const hashedPassword = await bcrypt.hash(body.newpassword, 10);
+  const hashedPassword = await bcrypt.hash(body.newPassword, 10);
 
   const updatedUser = await User.findByIdAndUpdate(
     body.id,
     { password: hashedPassword },
     { runValidators: true, new: true }
   );
-  res.json(updatedUser);
+  return res.json(updatedUser);
 };
 
 exports.updateUser = async (req, res, next) => {
@@ -166,7 +166,7 @@ exports.updateUser = async (req, res, next) => {
     runValidators: true,
     new: true,
   });
-  res.json(updatedUser);
+  return res.json(updatedUser);
 };
 
 exports.deleteFavRecipe = async (req, res, next) => {
