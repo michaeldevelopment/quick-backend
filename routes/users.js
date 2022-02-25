@@ -10,7 +10,7 @@ router
   .put(authToken, controller.deleteFavRecipe)
   .put(authToken, controller.updateUser);
 
-router.route("/emailrecovery").post(controller.emailRecovery);
+router.route("/passwordrecovery").post(controller.recoveryPassword);
 router.route("/passwordreset").post(controller.resetPassword);
 
 router.route("/signup").post(controller.createUser);

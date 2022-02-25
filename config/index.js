@@ -18,7 +18,7 @@ const config = {
   sendgrid: {
     apiKey: process.env.SENGRID_API_KEY,
     senderEmail: process.env.SENDER_EMAIL,
-    resetUrl: process.env.PASSWORD_RESET_URL,
+    resetUrl: process.env.CLIENT_URL,
   },
   epayco: {
     publicKey: process.env.EPAYCO_PUBLIC_KEY,
