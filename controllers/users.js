@@ -150,6 +150,7 @@ exports.resetPassword = async (req, res, next) => {
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
   }
+  
   const hashedPassword = await bcrypt.hash(body.newPassword, 10);
 
   const updatedUser = await User.findByIdAndUpdate(
@@ -167,6 +168,24 @@ exports.updateUser = async (req, res, next) => {
     new: true,
   });
   return res.json(updatedUser);
+};
+
+exports.deleteFavRecipe = async (req, res, next) => {
+  const { params = {}, decoded = {} } = req;
+
+  const findUser = await User.findByIdAndUpdate(
+    decoded.id,
+    {
+      $pull: { favoriteRecipes: params.id },
+    },
+    { new: true }
+  );
+
+  res.json({
+    error: false,
+    message: "La receta se ha eliminado de tus favoritos",
+    findUser,
+  });
 };
 
 exports.deleteFavRecipe = async (req, res, next) => {
