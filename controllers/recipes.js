@@ -3,9 +3,14 @@ const { Recipe, recipeFields } = require("../models/recipe");
 const User = require("../models/user");
 const Joi = require("@hapi/joi");
 
+let ingredientsItems = Joi.object().keys({
+  name: Joi.string().required(),
+  quantity: Joi.string().required(),
+});
+
 const schemaRecipe = Joi.object({
   title: Joi.string().required().min(10).max(50),
-  ingredients: Joi.string().required(),
+  ingredients: Joi.array().items(ingredientsItems),
   category: Joi.string().required(),
   food_hour: Joi.string().required(),
   description: Joi.string().required(),

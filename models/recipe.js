@@ -8,11 +8,13 @@ const recipeFields = {
     minLength: 10,
     maxLength: 50,
   },
-  ingredients: {
-    type: String,
-    trim: true,
-    required: true,
-  },
+  ingredients: [
+    {
+      type: Object,
+      trim: true,
+      required: true,
+    },
+  ],
   category: {
     type: String,
     trim: true,
