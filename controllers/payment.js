@@ -88,7 +88,7 @@ exports.makePayment = async (req, res) => {
       });
     }
   } catch (error) {
-    return res.json({ message: error, error: true });
+    return res.json({ message: "Error a la hora de hacer el pago", error: true });
   }
 };
 
