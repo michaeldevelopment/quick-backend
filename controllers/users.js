@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const Joi = require("@hapi/joi");
 const config = require("../config");
 const { welcomeEmail, changePassword } = require("../utils/mail");
-// const { Recipe, recipeFields } = require("../models/recipe");
 
 const schemaRegister = Joi.object({
   firstName: Joi.string().min(3).max(30),
@@ -115,13 +114,14 @@ exports.loginUser = async (req, res, next) => {
       email: validUser.email,
     },
     config.ACCESS_TOKEN_SECRET
-  );
+  );  
   res.json({
     token: accessToken,
     email: validUser.email,
     username: validUser.username,
     id: validUser._id,
     premium: validUser.premium.premiumStatus,
+    favRecipes: validUser.favoriteRecipes,
   });
 };
 
@@ -150,7 +150,7 @@ exports.resetPassword = async (req, res, next) => {
   if (error) {
     return res.json({ error: true, message: error.details[0].message });
   }
-  
+
   const hashedPassword = await bcrypt.hash(body.newPassword, 10);
 
   const updatedUser = await User.findByIdAndUpdate(
